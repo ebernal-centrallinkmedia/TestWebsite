@@ -1,0 +1,14 @@
+{
+  "name": "fireguard-tx",
+  "version": "1.0.0",
+  "description": "FireGuard TX — Fire Sprinkler Project Estimator & AI Plan Analyzer",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy:worker": "wrangler deploy",
+    "set:key": "wrangler secret put GEMINI_API_KEY",
+    "deploy": "npm run deploy:worker && echo '\\n✅ Worker deployed. Now push public/index.html to GitHub Pages.'"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

@@ -1,0 +1,15 @@
+name = "fireguard-tx-api"
+main = "worker/index.js"
+compatibility_date = "2024-01-01"
+
+# Uncomment and set your account ID from: https://dash.cloudflare.com
+# account_id = "your_account_id_here"
+
+[vars]
+# Non-secret vars go here (GEMINI_API_KEY must be set via: wrangler secret put GEMINI_API_KEY)
+APP_NAME = "FireGuard TX"
+
+# Workers routes — update with your actual domain/subdomain if using custom domain
+# [[routes]]
+# pattern = "api.yoursite.com/*"
+# zone_name = "yoursite.com"
