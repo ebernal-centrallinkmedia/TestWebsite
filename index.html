@@ -1,327 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fire Sprinkler Project Estimator & Plan Analyzer</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=instrument-serif@400&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#f6f4ef;--surface:#fbfaf7;--surface2:#f1ede7;--text:#231f1a;--muted:#6e6860;--border:#d7d1c8;--primary:#0a6670;--primary2:#b53b2f;--success:#247a43;--warn:#b57915;
-      --shadow:0 10px 30px rgba(20,20,20,.08);--radius:22px;
-    }
-    [data-theme="dark"]{--bg:#12110f;--surface:#1a1816;--surface2:#201e1c;--text:#e8e4dd;--muted:#a29b92;--border:#2c2825;--primary:#54a8b1;--primary2:#e06a5b;--shadow:0 10px 30px rgba(0,0,0,.35)}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:'Satoshi',system-ui,sans-serif;background:var(--bg);color:var(--text)}
-    .serif{font-family:'Instrument Serif',serif}
-    .card{background:var(--surface);border:1px solid color-mix(in oklab,var(--text) 12%, transparent);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .soft{background:var(--surface2)}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:16px;padding:.9rem 1.1rem;font-weight:700;border:1px solid transparent;transition:.2s ease;min-height:44px}
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--primary);color:white}.btn-ghost{background:transparent;border-color:var(--border);color:var(--text)}.btn-danger{background:var(--primary2);color:white}
-    .input,.select,.textarea{width:100%;padding:.9rem 1rem;border-radius:16px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font:inherit;outline:none}
-    .input:focus,.select:focus,.textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklab,var(--primary) 18%, transparent)}
-    .pill{padding:.35rem .7rem;border-radius:999px;font-size:.75rem;font-weight:700}
-    .fade-in{animation:fade .35s ease} @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    .hidden{display:none !important}
-    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);z-index:40;display:flex;align-items:center;justify-content:center;padding:16px}
-    .modal{width:min(1280px,100%);max-height:92vh;overflow:auto}
-    .grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
-    @media (max-width: 1024px){.grid2{grid-template-columns:1fr}}
-    .metric{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:16px}
-    .metric .value{font-size:1.4rem;font-weight:800}.metric .formula{font-size:.78rem;color:var(--muted);font-family:ui-monospace,monospace}
-    .section-title{font-size:clamp(2rem,2vw,3rem);line-height:1.05;margin:0}
-    .empty{padding:44px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:22px;background:color-mix(in oklab,var(--surface) 80%, var(--bg))}
-    .step{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--border);border-radius:16px;background:var(--surface2)}
-    .dot{width:12px;height:12px;border-radius:999px;background:var(--primary);margin-top:5px;flex:0 0 auto}
-    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width: 720px){.field-row{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fire Sprinkler Project Estimator & Plan Analyzer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=instrument-serif@400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f2ec;--surface:#fffdf9;--surface2:#f3eee7;--text:#241d16;--muted:#6f665d;--border:#dccfc0;--fire:#d9481c;--ember:#ff8a1f;--coal:#3b332d;--gold:#dca646;--success:#2c7a4b;--shadow:0 16px 40px rgba(65,35,12,.10);--radius:24px}
+[data-theme="dark"]{--bg:#11100f;--surface:#1a1816;--surface2:#201d1a;--text:#eee8df;--muted:#a69d93;--border:#322d29;--fire:#ff6b2d;--ember:#ff9b3b;--coal:#e9e0d4;--gold:#f0bf5a;--success:#5ac27f;--shadow:0 16px 40px rgba(0,0,0,.32)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:'Satoshi',system-ui,sans-serif}
+.serif{font-family:'Instrument Serif',serif}.hidden{display:none !important}
+.bg-flame{background:linear-gradient(135deg,color-mix(in oklab,var(--fire) 18%, var(--surface)) 0%, color-mix(in oklab,var(--ember) 14%, var(--surface)) 50%, var(--surface) 100%)}
+.card{background:var(--surface);border:1px solid color-mix(in oklab,var(--text) 10%, transparent);border-radius:var(--radius);box-shadow:var(--shadow)}
+.soft{background:var(--surface2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.95rem 1.15rem;border-radius:16px;font-weight:800;border:1px solid transparent;transition:.2s ease;cursor:pointer}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--fire);color:#fff}.btn-secondary{background:var(--coal);color:#fff}.btn-ghost{background:transparent;border-color:var(--border);color:var(--text)}
+.input,.select,.textarea{width:100%;padding:.95rem 1rem;border-radius:16px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:inherit;outline:none}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--fire);box-shadow:0 0 0 3px color-mix(in oklab,var(--fire) 18%, transparent)}
+.pill{display:inline-flex;align-items:center;padding:.35rem .7rem;border-radius:999px;font-size:.75rem;font-weight:800}
+.fade{animation:fade .35s ease} @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(12px);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{width:min(1280px,100%);max-height:92vh;overflow:auto}
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}@media(max-width:1024px){.grid2{grid-template-columns:1fr}}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:720px){.field-row{grid-template-columns:1fr}}
+.metric{background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:16px}
+.metric .value{font-size:1.4rem;font-weight:900}.metric .formula{font-size:.78rem;color:var(--muted);font-family:ui-monospace,monospace;margin-top:4px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--border);border-radius:16px;background:var(--surface2)}
+.dot{width:12px;height:12px;border-radius:999px;background:var(--fire);margin-top:6px;flex:0 0 auto;box-shadow:0 0 0 5px color-mix(in oklab,var(--fire) 12%, transparent)}
+.empty{padding:48px;text-align:center;border:1px dashed var(--border);border-radius:22px;color:var(--muted)}
+.loader{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 35%, color-mix(in oklab,var(--fire) 18%, var(--bg)) 0%, var(--bg) 60%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .6s ease, visibility .6s ease}
+.loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-ring{width:96px;height:96px;border-radius:999px;border:8px solid color-mix(in oklab,var(--fire) 18%, transparent);border-top-color:var(--fire);animation:spin 1s linear infinite;position:relative}
+.loader-ring:after{content:'';position:absolute;inset:18px;border-radius:999px;background:radial-gradient(circle,var(--ember),var(--fire))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fireline{height:4px;border-radius:999px;background:linear-gradient(90deg,var(--fire),var(--ember),var(--gold));background-size:200% 100%;animation:flow 2s linear infinite}
+@keyframes flow{to{background-position:200% 0}}
+.tiny{font-size:.82rem;color:var(--muted)}
+</style>
 </head>
 <body>
-  <a href="#main" class="sr-only">Skip to content</a>
-  <div id="app"></div>
+<div id="loader" class="loader"><div class="loader-ring"></div><div class="serif text-5xl text-center">Fire Sprinkler Estimator</div><div class="tiny">Loading project workspace…</div><div class="w-72 fireline"></div></div>
+<div id="app"></div>
 
-  <template id="appTemplate">
-    <header class="sticky top-0 z-30" style="background:color-mix(in oklab,var(--bg) 82%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)">
-      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+<template id="appTemplate">
+<header class="sticky top-0 z-30" style="background:color-mix(in oklab,var(--bg) 80%, transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)">
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+    <div>
+      <div class="serif text-3xl md:text-4xl">Fire Sprinkler Project Estimator & Plan Analyzer</div>
+      <div class="tiny">Professional contractor workflow with live math, saved estimates, and printable reports.</div>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap justify-end">
+      <button id="themeToggle" class="btn btn-ghost">Theme</button>
+      <button id="openSaved" class="btn btn-ghost">Saved Estimates</button>
+      <button id="openEstimate" class="btn btn-primary">Quick Estimate</button>
+      <button id="openAnalyzer" class="btn btn-secondary">Plan Analyzer</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+  <section class="card p-6 md:p-8 bg-flame fade">
+    <div class="grid gap-6 md:grid-cols-5 text-center">
+      <div><div class="text-3xl font-black" id="statProjects">0</div><div class="tiny uppercase tracking-[.14em]">Projects</div></div>
+      <div><div class="text-3xl font-black" id="statHeads">0</div><div class="tiny uppercase tracking-[.14em]">Heads</div></div>
+      <div><div class="text-3xl font-black" id="statMinutes">0</div><div class="tiny uppercase tracking-[.14em]">Minutes</div></div>
+      <div><div class="text-3xl font-black" id="statLast">—</div><div class="tiny uppercase tracking-[.14em]">Last Project</div></div>
+      <div><div class="text-3xl font-black" id="statDallas">✓</div><div class="tiny uppercase tracking-[.14em]">Dallas Logic</div></div>
+    </div>
+  </section>
+
+  <section class="grid gap-6 md:grid-cols-2">
+    <button id="openEstimate2" class="card p-8 text-left hover:scale-[1.01] transition bg-flame">
+      <div class="serif text-4xl mb-3">Quick Estimate</div><p class="tiny">Manual project entry with editable assumptions and a math-first live breakdown.</p>
+    </button>
+    <button id="openAnalyzer2" class="card p-8 text-left hover:scale-[1.01] transition bg-flame">
+      <div class="serif text-4xl mb-3">Plan Analyzer</div><p class="tiny">Upload plans or use demo mode for staged reading, counting, and confidence labels.</p>
+    </button>
+  </section>
+
+  <section class="card p-6 md:p-8">
+    <div class="flex items-center justify-between gap-4 mb-5">
+      <h2 class="text-2xl font-bold m-0">Saved Estimates</h2>
+      <span class="pill" style="background:color-mix(in oklab,var(--fire) 12%, var(--surface2));color:var(--fire)">Auto-saved</span>
+    </div>
+    <div id="projectsArea"></div>
+  </section>
+</main>
+</template>
+
+<template id="estimateTemplate">
+  <div class="overlay" id="estimateOverlay">
+    <div class="card modal">
+      <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
         <div>
-          <div class="serif text-3xl">Fire Sprinkler Project Estimator & Plan Analyzer</div>
-          <div style="color:var(--muted)">Estimate faster. Read plans smarter. Bid with confidence.</div>
+          <div class="serif text-4xl">Quick Estimate Calculator</div>
+          <div class="tiny">Edit overrides, update the estimate, then save it to your project history.</div>
         </div>
-        <div class="flex items-center gap-2">
-          <button id="themeToggle" class="btn btn-ghost" aria-label="Toggle theme">Theme</button>
-          <button id="openEstimate" class="btn btn-primary">Quick Estimate</button>
-          <button id="openAnalyzer" class="btn btn-ghost">Plan Analyzer</button>
-        </div>
-      </div>
-    </header>
-
-    <main id="main" class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-      <section class="card p-6 md:p-8 fade-in">
-        <div class="grid gap-6 md:grid-cols-5 text-center">
-          <div><div class="text-3xl font-extrabold" id="statProjects">0</div><div style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em">Projects</div></div>
-          <div><div class="text-3xl font-extrabold" id="statHeads">0</div><div style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em">Heads</div></div>
-          <div><div class="text-3xl font-extrabold" id="statMinutes">0</div><div style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em">Minutes</div></div>
-          <div><div class="text-3xl font-extrabold" id="statLast">—</div><div style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em">Last Project</div></div>
-          <div><div class="text-3xl font-extrabold" id="statDallas">✓</div><div style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em">Dallas Logic</div></div>
-        </div>
-      </section>
-
-      <section class="grid gap-6 md:grid-cols-2">
-        <button id="openEstimate2" class="card p-8 text-left hover:scale-[1.01] transition">
-          <div class="serif text-4xl mb-3">Quick Estimate</div>
-          <p style="color:var(--muted)">Manual project entry with editable assumptions and a math-first live breakdown.</p>
-        </button>
-        <button id="openAnalyzer2" class="card p-8 text-left hover:scale-[1.01] transition">
-          <div class="serif text-4xl mb-3">Plan Analyzer</div>
-          <p style="color:var(--muted)">Upload plans or use demo mode for staged reading, counting, and confidence labels.</p>
-        </button>
-      </section>
-
-      <section class="card p-6 md:p-8">
-        <div class="flex items-center justify-between gap-4 mb-5">
-          <h2 class="text-2xl font-bold m-0">Recent Projects</h2>
-          <span class="pill" style="background:color-mix(in oklab,var(--primary) 12%, var(--surface2));color:var(--primary)">Fresh start</span>
-        </div>
-        <div id="projectsArea"></div>
-      </section>
-    </main>
-  </template>
-
-  <template id="estimateTemplate">
-    <div class="overlay" id="estimateOverlay">
-      <div class="card modal">
-        <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
-          <div>
-            <div class="serif text-4xl">Quick Estimate Calculator</div>
-            <div style="color:var(--muted)">All numbers are editable through overrides, then recalculated with Update Estimate.</div>
-          </div>
+        <div class="flex gap-2">
           <button class="btn btn-ghost" id="closeEstimate">Close</button>
         </div>
-        <div class="p-6 grid2">
-          <section class="space-y-4">
-            <div class="field-row">
-              <div><label>Project Name</label><input class="input" id="projectName" placeholder="Project name"></div>
-              <div><label>Project Address</label><input class="input" id="projectAddress" placeholder="Dallas, TX or full address"></div>
-            </div>
-            <div class="field-row">
-              <div><label>Project Type</label><select class="select" id="projectType"><option>New Construction / Ground Up</option><option>Existing Construction</option><option>Renovation</option></select></div>
-              <div><label>Building Type</label><select class="select" id="buildingType"><option>Retail</option><option>Office</option><option>Warehouse</option><option>School</option><option>Medical</option><option>Mixed Use</option><option>Multifamily</option><option>Other</option></select></div>
-            </div>
-            <div class="field-row">
-              <div><label>System Type</label><select class="select" id="systemType"><option>Wet</option><option>Dry</option></select></div>
-              <div><label>Number of Floors</label><input class="input" id="numFloors" type="number" min="1" value="1"></div>
-            </div>
-            <div id="floorsWrap" class="space-y-3"></div>
-            <div class="field-row">
-              <div><label>Total Square Feet</label><input class="input" id="totalSqFt" type="number" value="0"></div>
-              <div><label>Sprinkler Heads</label><input class="input" id="sprinklerHeads" type="number" step="0.01" value="0"></div>
-            </div>
-            <div class="field-row">
-              <label><input type="checkbox" id="backflow"> Backflow</label>
-              <label><input type="checkbox" id="firePump"> Fire Pump</label>
-              <label><input type="checkbox" id="dryAddon"> Dry Add-on</label>
-              <label><input type="checkbox" id="taxExempt"> Tax Exempt</label>
-            </div>
-            <div><label>Notes / Assumptions</label><textarea class="textarea" id="notes" rows="4" placeholder="Add assumptions..."></textarea></div>
-          </section>
-          <aside class="space-y-4">
-            <div class="card soft p-5">
-              <div class="flex items-center justify-between mb-4"><h3 class="text-xl font-bold m-0">Editable Overrides</h3><span class="pill" style="background:color-mix(in oklab,var(--primary2) 12%, var(--surface2));color:var(--primary2)">Manual control</span></div>
-              <div class="field-row">
-                <div><label>SH Override</label><input class="input" id="overrideSh" type="number" step="0.01" placeholder="Auto"></div>
-                <div><label>Material Override</label><input class="input" id="overrideMaterial" type="number" step="0.01" placeholder="Auto"></div>
-                <div><label>Labor Override</label><input class="input" id="overrideLabor" type="number" step="0.01" placeholder="Auto"></div>
-                <div><label>Design Override</label><input class="input" id="overrideDesign" type="number" step="0.01" placeholder="Auto"></div>
-                <div><label>Misc Override</label><input class="input" id="overrideMisc" type="number" step="0.01" placeholder="Auto"></div>
-                <div><label>Profit %</label><input class="input" id="overrideProfitPct" type="number" step="0.01" value="20"></div>
-                <div><label>Tax Rate %</label><input class="input" id="overrideTaxRate" type="number" step="0.01" value="8.25"></div>
-                <div><label>Rounding Method</label><select class="select" id="roundingMethod"><option value="round">Round</option><option value="ceil">Ceil</option></select></div>
-              </div>
-            </div>
-            <div class="card soft p-5">
-              <h3 class="text-xl font-bold m-0 mb-4">Live Breakdown</h3>
-              <div class="space-y-3">
-                <div class="metric"><div class="flex justify-between"><div>Material</div><div class="value" id="materialVal">$0</div></div><div class="formula" id="materialFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Labor</div><div class="value" id="laborVal">$0</div></div><div class="formula" id="laborFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Design</div><div class="value" id="designVal">$0</div></div><div class="formula" id="designFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Misc</div><div class="value" id="miscVal">$0</div></div><div class="formula" id="miscFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Subtotal #1</div><div class="value" id="subtotalVal">$0</div></div><div class="formula" id="subtotalFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Taxes</div><div class="value" id="taxVal">$0</div></div><div class="formula" id="taxFormula">—</div></div>
-                <div class="metric"><div class="flex justify-between"><div>Profit</div><div class="value" id="profitVal">$0</div></div><div class="formula" id="profitFormula">—</div></div>
-                <div class="metric" style="border-color:color-mix(in oklab,var(--primary) 40%, var(--border));background:color-mix(in oklab,var(--primary) 8%, var(--surface2))"><div class="flex justify-between"><div>Final Total</div><div class="value" id="finalVal">$0</div></div><div class="formula" id="finalFormula">—</div></div>
-              </div>
-              <div class="mt-4 flex gap-3">
-                <button class="btn btn-primary flex-1" id="updateEstimate">Update Estimate</button>
-                <button class="btn btn-ghost flex-1" id="downloadPdf">Download PDF</button>
-              </div>
-            </div>
-          </aside>
-        </div>
       </div>
-    </div>
-  </template>
-
-  <template id="analyzerTemplate">
-    <div class="overlay" id="analyzerOverlay">
-      <div class="card modal">
-        <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
-          <div>
-            <div class="serif text-4xl">AI Plan Analyzer</div>
-            <div style="color:var(--muted)">Demo mode only: staged reading, counting, and confidence labels.</div>
+      <div class="p-6 grid2">
+        <section class="space-y-4">
+          <div class="field-row">
+            <div><label>Project Name</label><input class="input" id="projectName" placeholder="Project name"></div>
+            <div><label>Project Address</label><input class="input" id="projectAddress" placeholder="Dallas, TX or full address"></div>
           </div>
-          <button class="btn btn-ghost" id="closeAnalyzer">Close</button>
+          <div class="field-row">
+            <div><label>Project Type</label><select class="select" id="projectType"><option>New Construction / Ground Up</option><option>Existing Construction</option><option>Renovation</option></select></div>
+            <div><label>Building Type</label><select class="select" id="buildingType"><option>Retail</option><option>Office</option><option>Warehouse</option><option>School</option><option>Medical</option><option>Mixed Use</option><option>Multifamily</option><option>Other</option></select></div>
+          </div>
+          <div class="field-row">
+            <div><label>System Type</label><select class="select" id="systemType"><option>Wet</option><option>Dry</option></select></div>
+            <div><label>Number of Floors</label><input class="input" id="numFloors" type="number" min="1" value="1"></div>
+          </div>
+          <div id="floorsWrap" class="space-y-3"></div>
+          <div class="field-row">
+            <div><label>Total Square Feet</label><input class="input" id="totalSqFt" type="number" value="0"></div>
+            <div><label>Sprinkler Heads</label><input class="input" id="sprinklerHeads" type="number" step="0.01" value="0"></div>
+          </div>
+          <div class="field-row">
+            <label><input type="checkbox" id="backflow"> Backflow</label>
+            <label><input type="checkbox" id="firePump"> Fire Pump</label>
+            <label><input type="checkbox" id="dryAddon"> Dry Add-on</label>
+            <label><input type="checkbox" id="taxExempt"> Tax Exempt</label>
+          </div>
+          <div><label>Notes / Assumptions</label><textarea class="textarea" id="notes" rows="4" placeholder="Add assumptions..."></textarea></div>
+          <div class="card soft p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xl font-bold m-0">Save Estimate</h3>
+              <span class="pill" style="background:color-mix(in oklab,var(--success) 12%, var(--surface2));color:var(--success)">One click</span>
+            </div>
+            <div class="field-row">
+              <div><label>Saved Name</label><input class="input" id="saveName" placeholder="Auto uses project name"></div>
+              <div><label>Tag</label><input class="input" id="saveTag" placeholder="New / Existing / Reno"></div>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="btn btn-primary flex-1" id="saveEstimate">Save Estimate</button>
+              <button class="btn btn-ghost flex-1" id="clearEstimate">New Blank Estimate</button>
+            </div>
+          </div>
+        </section>
+        <aside class="space-y-4">
+          <div class="card soft p-5">
+            <div class="flex items-center justify-between mb-4"><h3 class="text-xl font-bold m-0">Editable Overrides</h3><span class="pill" style="background:color-mix(in oklab,var(--ember) 12%, var(--surface2));color:var(--ember)">Manual control</span></div>
+            <div class="field-row">
+              <div><label>SH Override</label><input class="input" id="overrideSh" type="number" step="0.01" placeholder="Auto"></div>
+              <div><label>Material Override</label><input class="input" id="overrideMaterial" type="number" step="0.01" placeholder="Auto"></div>
+              <div><label>Labor Override</label><input class="input" id="overrideLabor" type="number" step="0.01" placeholder="Auto"></div>
+              <div><label>Design Override</label><input class="input" id="overrideDesign" type="number" step="0.01" placeholder="Auto"></div>
+              <div><label>Misc Override</label><input class="input" id="overrideMisc" type="number" step="0.01" placeholder="Auto"></div>
+              <div><label>Profit %</label><input class="input" id="overrideProfitPct" type="number" step="0.01" value="20"></div>
+              <div><label>Tax Rate %</label><input class="input" id="overrideTaxRate" type="number" step="0.01" value="8.25"></div>
+              <div><label>Rounding Method</label><select class="select" id="roundingMethod"><option value="round">Round</option><option value="ceil">Ceil</option></select></div>
+            </div>
+          </div>
+          <div class="card soft p-5">
+            <h3 class="text-xl font-bold m-0 mb-4">Live Breakdown</h3>
+            <div class="space-y-3">
+              <div class="metric"><div class="flex justify-between"><div>Material</div><div class="value" id="materialVal">$0</div></div><div class="formula" id="materialFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Labor</div><div class="value" id="laborVal">$0</div></div><div class="formula" id="laborFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Design</div><div class="value" id="designVal">$0</div></div><div class="formula" id="designFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Misc</div><div class="value" id="miscVal">$0</div></div><div class="formula" id="miscFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Subtotal #1</div><div class="value" id="subtotalVal">$0</div></div><div class="formula" id="subtotalFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Taxes</div><div class="value" id="taxVal">$0</div></div><div class="formula" id="taxFormula">—</div></div>
+              <div class="metric"><div class="flex justify-between"><div>Profit</div><div class="value" id="profitVal">$0</div></div><div class="formula" id="profitFormula">—</div></div>
+              <div class="metric" style="border-color:color-mix(in oklab,var(--fire) 40%, var(--border));background:color-mix(in oklab,var(--fire) 9%, var(--surface2))"><div class="flex justify-between"><div>Final Total</div><div class="value" id="finalVal">$0</div></div><div class="formula" id="finalFormula">—</div></div>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button class="btn btn-primary flex-1" id="updateEstimate">Update Estimate</button>
+              <button class="btn btn-ghost flex-1" id="downloadPdf">Print PDF</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="savedTemplate">
+  <div class="overlay" id="savedOverlay">
+    <div class="card modal">
+      <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
+        <div>
+          <div class="serif text-4xl">Saved Estimates</div>
+          <div class="tiny">Open any saved breakdown later without clearing your current estimate.</div>
         </div>
-        <div class="p-6 grid2">
-          <section class="space-y-4">
-            <div class="card soft p-5 text-center">
-              <input type="file" id="planFile" class="hidden" accept=".pdf,.png,.jpg,.jpeg" multiple>
-              <label for="planFile" class="btn btn-primary">Upload Plans</label>
-              <button id="runDemo" class="btn btn-ghost ml-2">Run Demo Analysis</button>
-            </div>
-            <div class="card soft p-5 hidden" id="analysisPanel">
-              <div class="flex items-center justify-between mb-3"><h3 class="text-xl font-bold m-0">Analysis Progress</h3><span class="pill" id="analysisStatus">Idle</span></div>
-              <div class="w-full h-2 rounded-full soft mb-4"><div id="analysisBar" style="width:0%;height:100%;background:var(--primary);border-radius:999px"></div></div>
-              <div id="analysisSteps" class="space-y-2"></div>
-              <div class="mt-4 card p-4 soft"><div class="text-sm" style="color:var(--muted)">Live log</div><div id="analysisLog" class="mt-2 text-sm" style="white-space:pre-wrap"></div></div>
-            </div>
-          </section>
-          <aside class="space-y-4">
-            <div class="card soft p-5">
-              <h3 class="text-xl font-bold m-0 mb-3">Confidence Labels</h3>
-              <div class="space-y-3 text-sm">
-                <div><span class="pill" style="background:#d1fae5;color:#065f46">High</span> Explicitly found on title/legend/schedule.</div>
-                <div><span class="pill" style="background:#fef3c7;color:#92400e">Medium</span> Inferred from notes or partial evidence.</div>
-                <div><span class="pill" style="background:#fee2e2;color:#991b1b">Low</span> Estimated from limited evidence.</div>
-                <div><span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span> Manually approved by estimator.</div>
-              </div>
-            </div>
-            <div class="card soft p-5 hidden" id="analysisResult">
-              <h3 class="text-xl font-bold m-0 mb-3">Project Findings</h3>
-              <div id="findingList" class="space-y-3 text-sm"></div>
-            </div>
-          </aside>
+        <button class="btn btn-ghost" id="closeSaved">Close</button>
+      </div>
+      <div class="p-6">
+        <div id="savedList" class="space-y-3"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="pdfMetaTemplate">
+  <div class="overlay" id="pdfMetaOverlay">
+    <div class="card modal" style="width:min(760px,100%)">
+      <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
+        <div>
+          <div class="serif text-4xl">PDF Header Details</div>
+          <div class="tiny">These details will appear in the PDF header and footer.</div>
+        </div>
+        <button class="btn btn-ghost" id="closePdfMeta">Close</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="field-row">
+          <div><label>Your Company Name</label><input class="input" id="pdfCompany"></div>
+          <div><label>Email</label><input class="input" id="pdfEmail"></div>
+          <div><label>Phone Number</label><input class="input" id="pdfPhone"></div>
+          <div><label>Estimate For</label><input class="input" id="pdfClient" placeholder="General Contractor"></div>
+        </div>
+        <div><label>Logo (optional)</label><input class="input" id="pdfLogo" type="file" accept="image/*"></div>
+        <div class="flex gap-3">
+          <button class="btn btn-primary" id="createPdf">Generate PDF</button>
+          <button class="btn btn-ghost" id="skipPdf">Use Defaults</button>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-    const app = document.getElementById('app');
-    const startData = { projects: [] };
-    let currentEstimate = null;
-    let currentTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
+<template id="analyzerTemplate">
+  <div class="overlay" id="analyzerOverlay">
+    <div class="card modal">
+      <div class="px-6 py-5 flex items-center justify-between border-b" style="border-color:var(--border)">
+        <div>
+          <div class="serif text-4xl">AI Plan Analyzer</div>
+          <div class="tiny">Demo mode only: staged reading, counting, and confidence labels.</div>
+        </div>
+        <button class="btn btn-ghost" id="closeAnalyzer">Close</button>
+      </div>
+      <div class="p-6 grid2">
+        <section class="space-y-4">
+          <div class="card soft p-5 text-center">
+            <input type="file" id="planFile" class="hidden" accept=".pdf,.png,.jpg,.jpeg" multiple>
+            <label for="planFile" class="btn btn-primary">Upload Plans</label>
+            <button id="runDemo" class="btn btn-ghost ml-2">Run Demo Analysis</button>
+          </div>
+          <div class="card soft p-5 hidden" id="analysisPanel">
+            <div class="flex items-center justify-between mb-3"><h3 class="text-xl font-bold m-0">Analysis Progress</h3><span class="pill" id="analysisStatus">Idle</span></div>
+            <div class="w-full h-2 rounded-full soft mb-4"><div id="analysisBar" style="width:0%;height:100%;background:var(--fire);border-radius:999px"></div></div>
+            <div id="analysisSteps" class="space-y-2"></div>
+            <div class="mt-4 card p-4 soft"><div class="tiny">Live log</div><div id="analysisLog" class="mt-2 text-sm" style="white-space:pre-wrap"></div></div>
+          </div>
+        </section>
+        <aside class="space-y-4">
+          <div class="card soft p-5">
+            <h3 class="text-xl font-bold m-0 mb-3">Confidence Labels</h3>
+            <div class="space-y-3 text-sm">
+              <div><span class="pill" style="background:#d1fae5;color:#065f46">High</span> Explicitly found on title/legend/schedule.</div>
+              <div><span class="pill" style="background:#fef3c7;color:#92400e">Medium</span> Inferred from notes or partial evidence.</div>
+              <div><span class="pill" style="background:#fee2e2;color:#991b1b">Low</span> Estimated from limited evidence.</div>
+              <div><span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span> Manually approved by estimator.</div>
+            </div>
+          </div>
+          <div class="card soft p-5 hidden" id="analysisResult">
+            <h3 class="text-xl font-bold m-0 mb-3">Project Findings</h3>
+            <div id="findingList" class="space-y-3 text-sm"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</template>
 
-    function money(n){ return '$' + Math.round(Number(n||0)).toLocaleString(); }
-    function num(n){ return Math.round(Number(n||0)).toLocaleString(); }
-    function esc(s){ return String(s||'').replace(/[&<>\"]+/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m])); }
-
-    function renderApp(){ app.innerHTML = document.getElementById('appTemplate').innerHTML; bindApp(); renderProjects(); animateStats(); }
-    function renderProjects(){ document.getElementById('projectsArea').innerHTML = startData.projects.length ? startData.projects.map(p=>`<div class="step"><div class="dot"></div><div><div class="font-bold">${esc(p.name)}</div><div style="color:var(--muted)">${esc(p.address)} · ${esc(p.type)} · ${money(p.total)}</div></div></div>`).join('') : `<div class="empty"><div class="serif text-4xl mb-2">No projects yet</div><div>Start fresh with a new estimate or analyze your first plan set.</div></div>`; }
-    function animateStats(){ const vals=[['statProjects',0],['statHeads',0],['statMinutes',0]]; vals.forEach(([id,v])=>document.getElementById(id).textContent=v); document.getElementById('statLast').textContent='—'; }
-
-    function openEstimate(){ document.body.insertAdjacentHTML('beforeend', document.getElementById('estimateTemplate').innerHTML); const overlay=document.getElementById('estimateOverlay'); bindEstimate(); overlay.querySelector('#closeEstimate').onclick = ()=>overlay.remove(); overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); }); document.addEventListener('keydown', escCloseEstimate); initFloors(); recalc(); }
-    function escCloseEstimate(e){ const overlay=document.getElementById('estimateOverlay'); if(e.key==='Escape' && overlay){ overlay.remove(); document.removeEventListener('keydown', escCloseEstimate); } }
-
-    function bindEstimate(){
-      const ids=['projectType','systemType','numFloors','totalSqFt','sprinklerHeads','backflow','firePump','dryAddon','taxExempt','overrideSh','overrideMaterial','overrideLabor','overrideDesign','overrideMisc','overrideProfitPct','overrideTaxRate','roundingMethod','projectAddress'];
-      ids.forEach(id=>document.getElementById(id).addEventListener('input', ()=>{ if(id==='numFloors') initFloors(); if(id==='projectAddress') document.getElementById('projectAddress').value=document.getElementById('projectAddress').value; recalc(); }));
-      document.getElementById('updateEstimate').onclick = recalc;
-      document.getElementById('downloadPdf').onclick = pdfEstimate;
-    }
-
-    function initFloors(){
-      const n = Math.max(1, parseInt(document.getElementById('numFloors').value||1));
-      const wrap = document.getElementById('floorsWrap'); wrap.innerHTML='';
-      for(let i=1;i<=n;i++){
-        const row=document.createElement('div'); row.className='field-row'; row.innerHTML=`<div><label>Floor ${i} Sq Ft</label><input class="input floorSqFt" type="number" value="${i===1?20000:15000}"></div><div><label>Floor ${i} Notes</label><input class="input" placeholder="Optional"></div>`; wrap.appendChild(row);
-      }
-      wrap.querySelectorAll('.floorSqFt').forEach(i=>i.addEventListener('input', recalc));
-    }
-
-    function getLocation(){ const a=(document.getElementById('projectAddress').value||'').toLowerCase(); if(a.includes('dallas')) return 'Dallas'; if(a.includes('tx')) return 'Outside Dallas'; return 'Unknown'; }
-
-    function recalc(){
-      const type = document.getElementById('projectType').value;
-      const system = document.getElementById('systemType').value;
-      const floors = [...document.querySelectorAll('.floorSqFt')].map(i=>Number(i.value||0));
-      const totalSqFtAuto = floors.reduce((a,b)=>a+b,0);
-      const totalSqFt = Number(document.getElementById('totalSqFt').value||totalSqFtAuto);
-      const shAuto = totalSqFt/95;
-      const sh = document.getElementById('overrideSh').value !== '' ? Number(document.getElementById('overrideSh').value) : shAuto;
-      document.getElementById('sprinklerHeads').value = sh.toFixed(2);
-      const location = getLocation();
-      let material = system==='Dry' ? sh*180 : sh*(location==='Dallas' ? 105 : 150);
-      let labor = sh*32;
-      let designRaw = sh*11;
-      let design = Math.max(designRaw, 1000);
-      let misc = 5000 + (document.getElementById('firePump').checked ? 10000 : 0) + (document.getElementById('dryAddon').checked ? 14000 : 0) + (document.getElementById('backflow').checked ? 5000 : 0);
-      if(document.getElementById('overrideMaterial').value!=='') material = Number(document.getElementById('overrideMaterial').value);
-      if(document.getElementById('overrideLabor').value!=='') labor = Number(document.getElementById('overrideLabor').value);
-      if(document.getElementById('overrideDesign').value!=='') design = Number(document.getElementById('overrideDesign').value);
-      if(document.getElementById('overrideMisc').value!=='') misc = Number(document.getElementById('overrideMisc').value);
-      const subtotal = material + labor + design + misc;
-      const taxRate = Number(document.getElementById('overrideTaxRate').value||8.25)/100;
-      const profitPct = Number(document.getElementById('overrideProfitPct').value||20)/100;
-      const taxes = document.getElementById('taxExempt').checked ? 0 : (material + misc) * taxRate;
-      const profit = subtotal * profitPct;
-      let final = subtotal + taxes + profit;
-      if(type.includes('Existing')){ if(sh<=50) final = sh*300; else if(sh<=150) final = sh*150; else final = sh*100; }
-      if(document.getElementById('roundingMethod').value==='ceil') final = Math.ceil(final);
-      const set=(id,v)=>document.getElementById(id).textContent=v;
-      set('materialVal', money(material)); set('laborVal', money(labor)); set('designVal', money(design)); set('miscVal', money(misc)); set('subtotalVal', money(subtotal)); set('taxVal', money(taxes)); set('profitVal', money(profit)); set('finalVal', money(final));
-      set('materialFormula', `${num(sh)} SH × ${system==='Dry' ? '$180' : '$'+(location==='Dallas' ? '105' : '150')} (${location})`);
-      set('laborFormula', `${num(sh)} SH × $32`);
-      set('designFormula', `${num(sh)} SH × $11${design===1000?' · Min $1,000':''}`);
-      set('miscFormula', `Base $5,000${document.getElementById('firePump').checked?' + Fire Pump $10,000':''}${document.getElementById('dryAddon').checked?' + Dry Add-on $14,000':''}${document.getElementById('backflow').checked?' + Backflow $5,000':''}`);
-      set('subtotalFormula', 'Material + Labor + Design + Misc');
-      set('taxFormula', document.getElementById('taxExempt').checked ? 'Tax Exempt = $0' : `(Material + Misc) × ${(taxRate*100).toFixed(2)}%`);
-      set('profitFormula', `Subtotal × ${(profitPct*100).toFixed(2)}%`);
-      set('finalFormula', type.includes('Existing') ? 'Existing Construction tier pricing' : 'Subtotal + Taxes + Profit');
-      currentEstimate = {type, system, totalSqFt, sh, material, labor, design, misc, subtotal, taxes, profit, final, location};
-    }
-
-    function pdfEstimate(){
-      if(!window.jspdf?.jsPDF) return alert('PDF library failed to load.');
-      const { jsPDF } = window.jspdf; const d = new jsPDF();
-      d.setFontSize(18); d.text('Fire Sprinkler Estimate Report', 20, 20);
-      if(!currentEstimate) recalc();
-      const c = currentEstimate;
-      let y = 34;
-      [['Project',document.getElementById('projectName').value],['Address',document.getElementById('projectAddress').value],['Type',c.type],['System',c.system],['Location',c.location],['Total Sq Ft',c.totalSqFt],['Heads',c.sh.toFixed(2)],['Material',money(c.material)],['Labor',money(c.labor)],['Design',money(c.design)],['Misc',money(c.misc)],['Subtotal',money(c.subtotal)],['Taxes',money(c.taxes)],['Profit',money(c.profit)],['Final Total',money(c.final)]].forEach(([k,v])=>{ d.text(`${k}: ${v}`,20,y); y+=8; }); d.save('sprinkler-estimate.pdf');
-    }
-
-    function openAnalyzer(){ document.body.insertAdjacentHTML('beforeend', document.getElementById('analyzerTemplate').innerHTML); const overlay=document.getElementById('analyzerOverlay'); bindAnalyzer(); overlay.querySelector('#closeAnalyzer').onclick = ()=>overlay.remove(); overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); }); document.addEventListener('keydown', escCloseAnalyzer); }
-    function escCloseAnalyzer(e){ const overlay=document.getElementById('analyzerOverlay'); if(e.key==='Escape' && overlay){ overlay.remove(); document.removeEventListener('keydown', escCloseAnalyzer); } }
-
-    function bindAnalyzer(){
-      const panel=document.getElementById('analysisPanel');
-      document.getElementById('runDemo').onclick = async ()=>{
-        panel.classList.remove('hidden'); document.getElementById('analysisResult').classList.add('hidden'); const steps=['Upload received','Rendering sheets','Correcting orientation','Reading title block','OCR text extraction','Detecting sheet types','Searching for square footage','Looking for sprinkler head counts','Identifying wet/dry indicators','Scanning for backflow references','Scanning for fire pump references','Detecting dry system notes','Estimating floor count','Parsing occupancy/building type','Cross-checking address/location','Building confidence map','Generating structured report','Finalizing estimate'];
-        const stepsWrap=document.getElementById('analysisSteps'); const log=document.getElementById('analysisLog'); stepsWrap.innerHTML=''; log.textContent='';
-        for(let i=0;i<steps.length;i++){ stepsWrap.innerHTML = steps.map((s,idx)=>`<div class="step" style="opacity:${idx<=i?1:.35}"><div class="dot"></div><div><div class="font-bold">${s}</div><div style="color:var(--muted);font-size:.85rem">${idx<=i?'Complete':'Pending'}</div></div></div>`).join(''); document.getElementById('analysisBar').style.width = `${((i+1)/steps.length)*100}%`; document.getElementById('analysisStatus').textContent = steps[i]; log.textContent += `${steps[i]}...\n`; await new Promise(r=>setTimeout(r, 120)); }
-        document.getElementById('analysisResult').classList.remove('hidden'); document.getElementById('findingList').innerHTML = `
-          <div class="step"><div class="dot"></div><div><div class="font-bold">Building Type</div><div>Retail <span class="pill" style="background:#d1fae5;color:#065f46">High Confidence</span></div></div></div>
-          <div class="step"><div class="dot"></div><div><div class="font-bold">Fire Pump</div><div>Present <span class="pill" style="background:#fef3c7;color:#92400e">Medium Confidence</span></div></div></div>
-          <div class="step"><div class="dot"></div><div><div class="font-bold">Total Sq Ft</div><div>154,800 <span class="pill" style="background:#fee2e2;color:#991b1b">Low Confidence</span></div></div></div>
-          <div class="step"><div class="dot"></div><div><div class="font-bold">Heads</div><div>1,629 <span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span></div></div></div>`;
-      };
-    }
-
-    function bindApp(){
-      document.getElementById('themeToggle').onclick = ()=>{ currentTheme = currentTheme==='dark'?'light':'dark'; document.documentElement.setAttribute('data-theme', currentTheme); };
-      document.getElementById('openEstimate').onclick = openEstimate;
-      document.getElementById('openEstimate2').onclick = openEstimate;
-      document.getElementById('openAnalyzer').onclick = openAnalyzer;
-      document.getElementById('openAnalyzer2').onclick = openAnalyzer;
-    }
-
-    renderApp();
-  </script>
+<script>
+const app=document.getElementById('app');
+const state={projects:JSON.parse(localStorage.getItem('fs_projects')||'[]')};
+let currentEstimate=null,currentTheme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light',currentPdfMeta=null;
+document.documentElement.setAttribute('data-theme',currentTheme);
+function money(n){return'$'+Math.round(Number(n||0)).toLocaleString()}function num(n){return Math.round(Number(n||0)).toLocaleString()}function esc(s){return String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function saveProjects(){localStorage.setItem('fs_projects',JSON.stringify(state.projects))}
+function renderApp(){app.innerHTML=document.getElementById('appTemplate').innerHTML;bindApp();renderProjects();animateStats();}
+function animateStats(){document.getElementById('statProjects').textContent=state.projects.length;document.getElementById('statHeads').textContent=state.projects.reduce((a,p)=>a+(Number(p.sh)||0),0).toFixed(0);document.getElementById('statMinutes').textContent=Math.max(12,state.projects.length?18:0);document.getElementById('statLast').textContent=state.projects[0]?.name||'—'}
+function renderProjects(){document.getElementById('projectsArea').innerHTML=state.projects.length?state.projects.map((p,i)=>`<div class="step fade" style="justify-content:space-between"><div style="display:flex;gap:12px"><div class="dot"></div><div><div class="font-bold">${esc(p.name)}</div><div class="tiny">${esc(p.address)} · ${esc(p.type)} · ${esc(p.building)} · ${money(p.final)}</div></div></div><button class="btn btn-ghost" data-open-save="${i}">Open</button></div>`).join(''):`<div class="empty"><div class="serif text-4xl mb-2">No saved estimates yet</div><div>Create your first estimate and save it here automatically.</div></div>`;document.querySelectorAll('[data-open-save]').forEach(b=>b.onclick=()=>openSavedAt(+b.dataset.openSave))}
+function bindApp(){document.getElementById('themeToggle').onclick=()=>{currentTheme=currentTheme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',currentTheme)};document.getElementById('openEstimate').onclick=openEstimate;document.getElementById('openEstimate2').onclick=openEstimate;document.getElementById('openAnalyzer').onclick=openAnalyzer;document.getElementById('openAnalyzer2').onclick=openAnalyzer;document.getElementById('openSaved').onclick=openSaved}
+function openEstimate(){document.body.insertAdjacentHTML('beforeend',document.getElementById('estimateTemplate').innerHTML);const overlay=document.getElementById('estimateOverlay');bindEstimate();overlay.querySelector('#closeEstimate').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseEstimate);initFloors();recalc();}
+function escCloseEstimate(e){const overlay=document.getElementById('estimateOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseEstimate)}}
+function bindEstimate(){const ids=['projectType','systemType','numFloors','totalSqFt','sprinklerHeads','backflow','firePump','dryAddon','taxExempt','overrideSh','overrideMaterial','overrideLabor','overrideDesign','overrideMisc','overrideProfitPct','overrideTaxRate','roundingMethod','projectAddress'];ids.forEach(id=>document.getElementById(id).addEventListener('input',()=>{if(id==='numFloors')initFloors();recalc()}));document.getElementById('updateEstimate').onclick=recalc;document.getElementById('downloadPdf').onclick=showPdfMeta;document.getElementById('saveEstimate').onclick=saveCurrentEstimate;document.getElementById('clearEstimate').onclick=clearEstimate}
+function initFloors(){const n=Math.max(1,parseInt(document.getElementById('numFloors').value||1));const wrap=document.getElementById('floorsWrap');wrap.innerHTML='';for(let i=1;i<=n;i++){const row=document.createElement('div');row.className='field-row';row.innerHTML=`<div><label>Floor ${i} Sq Ft</label><input class="input floorSqFt" type="number" value="${i===1?20000:15000}"></div><div><label>Floor ${i} Notes</label><input class="input" placeholder="Optional"></div>`;wrap.appendChild(row)}wrap.querySelectorAll('.floorSqFt').forEach(i=>i.addEventListener('input',recalc))}
+function getLocation(){const a=(document.getElementById('projectAddress').value||'').toLowerCase();if(a.includes('dallas'))return'Dallas';if(a.includes('tx'))return'Outside Dallas';return'Unknown'}
+function recalc(){const type=document.getElementById('projectType').value;const system=document.getElementById('systemType').value;const floors=[...document.querySelectorAll('.floorSqFt')].map(i=>Number(i.value||0));const totalSqFtAuto=floors.reduce((a,b)=>a+b,0);const totalSqFt=Number(document.getElementById('totalSqFt').value||totalSqFtAuto);const shAuto=totalSqFt/95;const sh=document.getElementById('overrideSh').value!==''?Number(document.getElementById('overrideSh').value):shAuto;document.getElementById('sprinklerHeads').value=sh.toFixed(2);const location=getLocation();let material=system==='Dry'?sh*180:sh*(location==='Dallas'?105:150);let labor=sh*32;let designRaw=sh*11;let design=Math.max(designRaw,1000);let misc=5000+(document.getElementById('firePump').checked?10000:0)+(document.getElementById('dryAddon').checked?14000:0)+(document.getElementById('backflow').checked?5000:0);if(document.getElementById('overrideMaterial').value!=='')material=Number(document.getElementById('overrideMaterial').value);if(document.getElementById('overrideLabor').value!=='')labor=Number(document.getElementById('overrideLabor').value);if(document.getElementById('overrideDesign').value!=='')design=Number(document.getElementById('overrideDesign').value);if(document.getElementById('overrideMisc').value!=='')misc=Number(document.getElementById('overrideMisc').value);const subtotal=material+labor+design+misc;const taxRate=Number(document.getElementById('overrideTaxRate').value||8.25)/100;const profitPct=Number(document.getElementById('overrideProfitPct').value||20)/100;const taxes=document.getElementById('taxExempt').checked?0:(material+misc)*taxRate;const profit=subtotal*profitPct;let final=subtotal+taxes+profit;if(type.includes('Existing')){if(sh<=50)final=sh*300;else if(sh<=150)final=sh*150;else final=sh*100}if(document.getElementById('roundingMethod').value==='ceil')final=Math.ceil(final);const set=(id,v)=>document.getElementById(id).textContent=v;set('materialVal',money(material));set('laborVal',money(labor));set('designVal',money(design));set('miscVal',money(misc));set('subtotalVal',money(subtotal));set('taxVal',money(taxes));set('profitVal',money(profit));set('finalVal',money(final));set('materialFormula',`${num(sh)} SH × ${system==='Dry'?'$180':'$'+(location==='Dallas'?'105':'150')} (${location})`);set('laborFormula',`${num(sh)} SH × $32`);set('designFormula',`${num(sh)} SH × $11${design===1000?' · Min $1,000':''}`);set('miscFormula',`Base $5,000${document.getElementById('firePump').checked?' + Fire Pump $10,000':''}${document.getElementById('dryAddon').checked?' + Dry Add-on $14,000':''}${document.getElementById('backflow').checked?' + Backflow $5,000':''}`);set('subtotalFormula','Material + Labor + Design + Misc');set('taxFormula',document.getElementById('taxExempt').checked?'Tax Exempt = $0':`(Material + Misc) × ${(taxRate*100).toFixed(2)}%`);set('profitFormula',`Subtotal × ${(profitPct*100).toFixed(2)}%`);set('finalFormula',type.includes('Existing')?'Existing Construction tier pricing':'Subtotal + Taxes + Profit');currentEstimate={type,system,totalSqFt,sh,material,labor,design,misc,subtotal,taxes,profit,final,location,projectName:document.getElementById('projectName').value||'Untitled Estimate',address:document.getElementById('projectAddress').value||'',building:document.getElementById('buildingType').value||''}}
+function clearEstimate(){['projectName','projectAddress','notes','saveName','saveTag'].forEach(id=>document.getElementById(id).value='');document.getElementById('numFloors').value=1;document.getElementById('projectType').selectedIndex=0;document.getElementById('buildingType').selectedIndex=0;document.getElementById('systemType').selectedIndex=0;['backflow','firePump','dryAddon','taxExempt'].forEach(id=>document.getElementById(id).checked=false);['overrideSh','overrideMaterial','overrideLabor','overrideDesign','overrideMisc'].forEach(id=>document.getElementById(id).value='');document.getElementById('overrideProfitPct').value=20;document.getElementById('overrideTaxRate').value=8.25;document.getElementById('roundingMethod').value='round';initFloors();recalc()}
+function saveCurrentEstimate(){if(!currentEstimate)recalc();const name=(document.getElementById('saveName').value||document.getElementById('projectName').value||currentEstimate.projectName||'Untitled Estimate').trim();const tag=(document.getElementById('saveTag').value||document.getElementById('projectType').value||'Estimate').trim();const entry={...currentEstimate,name,tag,date:new Date().toLocaleString(),notes:document.getElementById('notes').value||''};state.projects.unshift(entry);saveProjects();renderProjects();animateStats();alert('Estimate saved to history.')}
+function openSaved(){document.body.insertAdjacentHTML('beforeend',document.getElementById('savedTemplate').innerHTML);const overlay=document.getElementById('savedOverlay');renderSavedList();overlay.querySelector('#closeSaved').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseSaved)}
+function escCloseSaved(e){const overlay=document.getElementById('savedOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseSaved)}}
+function renderSavedList(){const box=document.getElementById('savedList');box.innerHTML=state.projects.length?state.projects.map((p,i)=>`<div class="step"><div class="dot"></div><div style="flex:1"><div class="flex items-center justify-between gap-2"><div><div class="font-bold">${esc(p.name)}</div><div class="tiny">${esc(p.date)} · ${esc(p.location)} · ${esc(p.tag)}</div></div><button class="btn btn-ghost" onclick="window.__openSavedProject(${i})">Open</button></div></div>`).join(''):`<div class="empty">No saved estimates yet.</div>`;window.__openSavedProject=(i)=>openSavedAt(i)}
+function openSavedAt(i){const p=state.projects[i];if(!p)return;document.querySelectorAll('.overlay').forEach(o=>o.remove());openEstimate();setTimeout(()=>{document.getElementById('projectName').value=p.projectName||p.name||'';document.getElementById('projectAddress').value=p.address||'';document.getElementById('projectType').value=p.type||'New Construction / Ground Up';document.getElementById('buildingType').value=p.building||'Retail';document.getElementById('systemType').value=p.system||'Wet';document.getElementById('totalSqFt').value=p.totalSqFt||0;document.getElementById('sprinklerHeads').value=(p.sh||0).toFixed(2);document.getElementById('overrideSh').value=p.sh||'';document.getElementById('overrideMaterial').value=p.material||'';document.getElementById('overrideLabor').value=p.labor||'';document.getElementById('overrideDesign').value=p.design||'';document.getElementById('overrideMisc').value=p.misc||'';document.getElementById('overrideProfitPct').value=p.subtotal?((p.profit/p.subtotal)*100).toFixed(2):20;document.getElementById('overrideTaxRate').value=8.25;recalc()},50)}
+function showPdfMeta(){document.body.insertAdjacentHTML('beforeend',document.getElementById('pdfMetaTemplate').innerHTML);const overlay=document.getElementById('pdfMetaOverlay');overlay.querySelector('#closePdfMeta').onclick=()=>overlay.remove();overlay.querySelector('#skipPdf').onclick=()=>{currentPdfMeta={company:'',email:'',phone:'',client:'',logo:null};overlay.remove();generatePdf()};overlay.querySelector('#createPdf').onclick=()=>{const logo=document.getElementById('pdfLogo').files[0];currentPdfMeta={company:document.getElementById('pdfCompany').value,email:document.getElementById('pdfEmail').value,phone:document.getElementById('pdfPhone').value,client:document.getElementById('pdfClient').value,logo};overlay.remove();generatePdf()};overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()})}
+async function generatePdf(){if(!window.jspdf?.jsPDF)return alert('PDF library failed to load.');if(!currentEstimate)recalc();const {jsPDF}=window.jspdf;const d=new jsPDF({unit:'pt',format:'letter'});const c=currentEstimate;const meta=currentPdfMeta||{};let y=36;d.setFillColor(217,72,28);d.rect(0,0,612,92,'F');d.setTextColor(255,255,255);d.setFontSize(20);d.text(meta.company||'Fire Sprinkler Estimate',36,32);d.setFontSize(11);d.text([meta.email,meta.phone].filter(Boolean).join('  •  '),36,52);d.text(meta.client?`Prepared for: ${meta.client}`:'Prepared for: General Contractor',36,70);if(meta.logo instanceof File){const data=await readFileAsDataURL(meta.logo);try{d.addImage(data,'PNG',470,18,96,50)}catch(e){}}d.setTextColor(20,20,20);d.setFontSize(14);d.text('Project Overview',36,124);y=144;const rows=[['Project',document.getElementById('projectName').value||'Untitled'],['Address',document.getElementById('projectAddress').value||''],['Project Type',c.type],['Building Type',document.getElementById('buildingType').value],['System',c.system],['Location Logic',c.location],['Total Sq Ft',num(c.totalSqFt)],['Sprinkler Heads',c.sh.toFixed(2)],['Material',money(c.material)],['Labor',money(c.labor)],['Design',money(c.design)],['Misc',money(c.misc)],['Subtotal #1',money(c.subtotal)],['Taxes',money(c.taxes)],['Profit',money(c.profit)],['Final Total',money(c.final)]];rows.forEach(([k,v],i)=>{const yy=y+i*22;d.setDrawColor(223,214,204);d.roundedRect(34,yy-14,544,18,6,6);d.setFontSize(10);d.text(k,44,yy);d.text(String(v),300,yy)});d.setFontSize(13);d.text('How This Estimate Was Calculated',36,520);d.setFontSize(10);const logic=[`SH = ${num(c.totalSqFt)} ÷ 95 = ${c.sh.toFixed(2)} heads`,`Material = ${c.sh.toFixed(2)} SH × ${c.system==='Dry'?'180':(c.location==='Dallas'?'105':'150')}`,`Labor = ${c.sh.toFixed(2)} SH × 32`,`Design = max(${c.sh.toFixed(2)} × 11, 1000)`,`Misc includes base and selected add-ons`,`Taxes = ${(document.getElementById('taxExempt').checked?'$0':`(Material + Misc) × 8.25%`)}, Profit = 20%`];d.splitTextToSize(logic.join('\n'),540).forEach((line,idx)=>d.text(line,36,540+idx*14));d.setFontSize(9);d.setTextColor(110,102,93);d.text(`${meta.company||'Fire Sprinkler Estimate'} • ${meta.email||''} • ${meta.phone||''}`,36,770);d.text('Professional fire protection estimate generated by Fire Sprinkler Project Estimator & Plan Analyzer',330,770,{align:'right'});d.save((document.getElementById('projectName').value||'sprinkler-estimate').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.pdf')}
+function readFileAsDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+function openAnalyzer(){document.body.insertAdjacentHTML('beforeend',document.getElementById('analyzerTemplate').innerHTML);const overlay=document.getElementById('analyzerOverlay');bindAnalyzer();overlay.querySelector('#closeAnalyzer').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseAnalyzer)}
+function escCloseAnalyzer(e){const overlay=document.getElementById('analyzerOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseAnalyzer)}}
+function bindAnalyzer(){const panel=document.getElementById('analysisPanel');document.getElementById('runDemo').onclick=async()=>{panel.classList.remove('hidden');document.getElementById('analysisResult').classList.add('hidden');const steps=['Upload received','Rendering sheets','Correcting orientation','Reading title block','OCR text extraction','Detecting sheet types','Searching for square footage','Looking for sprinkler head counts','Identifying wet/dry indicators','Scanning for backflow references','Scanning for fire pump references','Detecting dry system notes','Estimating floor count','Parsing occupancy/building type','Cross-checking address/location','Building confidence map','Generating structured report','Finalizing estimate'];const stepsWrap=document.getElementById('analysisSteps');const log=document.getElementById('analysisLog');stepsWrap.innerHTML='';log.textContent='';for(let i=0;i<steps.length;i++){stepsWrap.innerHTML=steps.map((s,idx)=>`<div class="step" style="opacity:${idx<=i?1:.35}"><div class="dot"></div><div><div class="font-bold">${s}</div><div class="tiny">${idx<=i?'Complete':'Pending'}</div></div></div>`).join('');document.getElementById('analysisBar').style.width=`${((i+1)/steps.length)*100}%`;document.getElementById('analysisStatus').textContent=steps[i];log.textContent+=`${steps[i]}...\n`;await new Promise(r=>setTimeout(r,120))}document.getElementById('analysisResult').classList.remove('hidden');document.getElementById('findingList').innerHTML=`<div class="step"><div class="dot"></div><div><div class="font-bold">Building Type</div><div>Retail <span class="pill" style="background:#d1fae5;color:#065f46">High Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Fire Pump</div><div>Present <span class="pill" style="background:#fef3c7;color:#92400e">Medium Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Total Sq Ft</div><div>154,800 <span class="pill" style="background:#fee2e2;color:#991b1b">Low Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Heads</div><div>1,629 <span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span></div></div></div>`}}
+function openSaved(){document.body.insertAdjacentHTML('beforeend',document.getElementById('savedTemplate').innerHTML);const overlay=document.getElementById('savedOverlay');renderSavedList();overlay.querySelector('#closeSaved').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseSaved)}
+function escCloseSaved(e){const overlay=document.getElementById('savedOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseSaved)}}
+function renderSavedList(){const box=document.getElementById('savedList');box.innerHTML=state.projects.length?state.projects.map((p,i)=>`<div class="step"><div class="dot"></div><div style="flex:1"><div class="flex items-center justify-between gap-2"><div><div class="font-bold">${esc(p.name)}</div><div class="tiny">${esc(p.date)} · ${esc(p.location)} · ${esc(p.tag)}</div></div><button class="btn btn-ghost" onclick="window.__openSavedProject(${i})">Open</button></div></div>`).join(''):`<div class="empty">No saved estimates yet.</div>`;window.__openSavedProject=(i)=>openSavedAt(i)}
+function openSavedAt(i){const p=state.projects[i];if(!p)return;document.querySelectorAll('.overlay').forEach(o=>o.remove());openEstimate();setTimeout(()=>{document.getElementById('projectName').value=p.projectName||p.name||'';document.getElementById('projectAddress').value=p.address||'';document.getElementById('projectType').value=p.type||'New Construction / Ground Up';document.getElementById('buildingType').value=p.building||'Retail';document.getElementById('systemType').value=p.system||'Wet';document.getElementById('totalSqFt').value=p.totalSqFt||0;document.getElementById('sprinklerHeads').value=(p.sh||0).toFixed(2);document.getElementById('overrideSh').value=p.sh||'';document.getElementById('overrideMaterial').value=p.material||'';document.getElementById('overrideLabor').value=p.labor||'';document.getElementById('overrideDesign').value=p.design||'';document.getElementById('overrideMisc').value=p.misc||'';document.getElementById('overrideProfitPct').value=p.subtotal?((p.profit/p.subtotal)*100).toFixed(2):20;document.getElementById('overrideTaxRate').value=8.25;recalc()},50)}
+function showPdfMeta(){document.body.insertAdjacentHTML('beforeend',document.getElementById('pdfMetaTemplate').innerHTML);const overlay=document.getElementById('pdfMetaOverlay');overlay.querySelector('#closePdfMeta').onclick=()=>overlay.remove();overlay.querySelector('#skipPdf').onclick=()=>{currentPdfMeta={company:'',email:'',phone:'',client:'',logo:null};overlay.remove();generatePdf()};overlay.querySelector('#createPdf').onclick=()=>{const logo=document.getElementById('pdfLogo').files[0];currentPdfMeta={company:document.getElementById('pdfCompany').value,email:document.getElementById('pdfEmail').value,phone:document.getElementById('pdfPhone').value,client:document.getElementById('pdfClient').value,logo};overlay.remove();generatePdf()};overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()})}
+async function generatePdf(){if(!window.jspdf?.jsPDF)return alert('PDF library failed to load.');if(!currentEstimate)recalc();const {jsPDF}=window.jspdf;const d=new jsPDF({unit:'pt',format:'letter'});const c=currentEstimate;const meta=currentPdfMeta||{};let y=36;d.setFillColor(217,72,28);d.rect(0,0,612,92,'F');d.setTextColor(255,255,255);d.setFontSize(20);d.text(meta.company||'Fire Sprinkler Estimate',36,32);d.setFontSize(11);d.text([meta.email,meta.phone].filter(Boolean).join('  •  '),36,52);d.text(meta.client?`Prepared for: ${meta.client}`:'Prepared for: General Contractor',36,70);if(meta.logo instanceof File){const data=await readFileAsDataURL(meta.logo);try{d.addImage(data,'PNG',470,18,96,50)}catch(e){}}d.setTextColor(20,20,20);d.setFontSize(14);d.text('Project Overview',36,124);y=144;const rows=[['Project',document.getElementById('projectName').value||'Untitled'],['Address',document.getElementById('projectAddress').value||''],['Project Type',c.type],['Building Type',document.getElementById('buildingType').value],['System',c.system],['Location Logic',c.location],['Total Sq Ft',num(c.totalSqFt)],['Sprinkler Heads',c.sh.toFixed(2)],['Material',money(c.material)],['Labor',money(c.labor)],['Design',money(c.design)],['Misc',money(c.misc)],['Subtotal #1',money(c.subtotal)],['Taxes',money(c.taxes)],['Profit',money(c.profit)],['Final Total',money(c.final)]];rows.forEach(([k,v],i)=>{const yy=y+i*22;d.setDrawColor(223,214,204);d.roundedRect(34,yy-14,544,18,6,6);d.setFontSize(10);d.text(k,44,yy);d.text(String(v),300,yy)});d.setFontSize(13);d.text('How This Estimate Was Calculated',36,520);d.setFontSize(10);const logic=[`SH = ${num(c.totalSqFt)} ÷ 95 = ${c.sh.toFixed(2)} heads`,`Material = ${c.sh.toFixed(2)} SH × ${c.system==='Dry'?'180':(c.location==='Dallas'?'105':'150')}`,`Labor = ${c.sh.toFixed(2)} SH × 32`,`Design = max(${c.sh.toFixed(2)} × 11, 1000)`,`Misc includes base and selected add-ons`,`Taxes = ${(document.getElementById('taxExempt').checked?'$0':`(Material + Misc) × 8.25%`)}, Profit = 20%`];d.splitTextToSize(logic.join('\n'),540).forEach((line,idx)=>d.text(line,36,540+idx*14));d.setFontSize(9);d.setTextColor(110,102,93);d.text(`${meta.company||'Fire Sprinkler Estimate'} • ${meta.email||''} • ${meta.phone||''}`,36,770);d.text('Professional fire protection estimate generated by Fire Sprinkler Project Estimator & Plan Analyzer',330,770,{align:'right'});d.save((document.getElementById('projectName').value||'sprinkler-estimate').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.pdf')}
+function readFileAsDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+function openAnalyzer(){document.body.insertAdjacentHTML('beforeend',document.getElementById('analyzerTemplate').innerHTML);const overlay=document.getElementById('analyzerOverlay');bindAnalyzer();overlay.querySelector('#closeAnalyzer').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseAnalyzer)}
+function escCloseAnalyzer(e){const overlay=document.getElementById('analyzerOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseAnalyzer)}}
+function bindAnalyzer(){const panel=document.getElementById('analysisPanel');document.getElementById('runDemo').onclick=async()=>{panel.classList.remove('hidden');document.getElementById('analysisResult').classList.add('hidden');const steps=['Upload received','Rendering sheets','Correcting orientation','Reading title block','OCR text extraction','Detecting sheet types','Searching for square footage','Looking for sprinkler head counts','Identifying wet/dry indicators','Scanning for backflow references','Scanning for fire pump references','Detecting dry system notes','Estimating floor count','Parsing occupancy/building type','Cross-checking address/location','Building confidence map','Generating structured report','Finalizing estimate'];const stepsWrap=document.getElementById('analysisSteps');const log=document.getElementById('analysisLog');stepsWrap.innerHTML='';log.textContent='';for(let i=0;i<steps.length;i++){stepsWrap.innerHTML=steps.map((s,idx)=>`<div class="step" style="opacity:${idx<=i?1:.35}"><div class="dot"></div><div><div class="font-bold">${s}</div><div class="tiny">${idx<=i?'Complete':'Pending'}</div></div></div>`).join('');document.getElementById('analysisBar').style.width=`${((i+1)/steps.length)*100}%`;document.getElementById('analysisStatus').textContent=steps[i];log.textContent+=`${steps[i]}...\n`;await new Promise(r=>setTimeout(r,120))}document.getElementById('analysisResult').classList.remove('hidden');document.getElementById('findingList').innerHTML=`<div class="step"><div class="dot"></div><div><div class="font-bold">Building Type</div><div>Retail <span class="pill" style="background:#d1fae5;color:#065f46">High Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Fire Pump</div><div>Present <span class="pill" style="background:#fef3c7;color:#92400e">Medium Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Total Sq Ft</div><div>154,800 <span class="pill" style="background:#fee2e2;color:#991b1b">Low Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Heads</div><div>1,629 <span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span></div></div></div>`}}
+function openSaved(){document.body.insertAdjacentHTML('beforeend',document.getElementById('savedTemplate').innerHTML);const overlay=document.getElementById('savedOverlay');renderSavedList();overlay.querySelector('#closeSaved').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseSaved)}
+function escCloseSaved(e){const overlay=document.getElementById('savedOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseSaved)}}
+function renderSavedList(){const box=document.getElementById('savedList');box.innerHTML=state.projects.length?state.projects.map((p,i)=>`<div class="step"><div class="dot"></div><div style="flex:1"><div class="flex items-center justify-between gap-2"><div><div class="font-bold">${esc(p.name)}</div><div class="tiny">${esc(p.date)} · ${esc(p.location)} · ${esc(p.tag)}</div></div><button class="btn btn-ghost" onclick="window.__openSavedProject(${i})">Open</button></div></div>`).join(''):`<div class="empty">No saved estimates yet.</div>`;window.__openSavedProject=(i)=>openSavedAt(i)}
+function openSavedAt(i){const p=state.projects[i];if(!p)return;document.querySelectorAll('.overlay').forEach(o=>o.remove());openEstimate();setTimeout(()=>{document.getElementById('projectName').value=p.projectName||p.name||'';document.getElementById('projectAddress').value=p.address||'';document.getElementById('projectType').value=p.type||'New Construction / Ground Up';document.getElementById('buildingType').value=p.building||'Retail';document.getElementById('systemType').value=p.system||'Wet';document.getElementById('totalSqFt').value=p.totalSqFt||0;document.getElementById('sprinklerHeads').value=(p.sh||0).toFixed(2);document.getElementById('overrideSh').value=p.sh||'';document.getElementById('overrideMaterial').value=p.material||'';document.getElementById('overrideLabor').value=p.labor||'';document.getElementById('overrideDesign').value=p.design||'';document.getElementById('overrideMisc').value=p.misc||'';document.getElementById('overrideProfitPct').value=p.subtotal?((p.profit/p.subtotal)*100).toFixed(2):20;document.getElementById('overrideTaxRate').value=8.25;recalc()},50)}
+function showPdfMeta(){document.body.insertAdjacentHTML('beforeend',document.getElementById('pdfMetaTemplate').innerHTML);const overlay=document.getElementById('pdfMetaOverlay');overlay.querySelector('#closePdfMeta').onclick=()=>overlay.remove();overlay.querySelector('#skipPdf').onclick=()=>{currentPdfMeta={company:'',email:'',phone:'',client:'',logo:null};overlay.remove();generatePdf()};overlay.querySelector('#createPdf').onclick=()=>{const logo=document.getElementById('pdfLogo').files[0];currentPdfMeta={company:document.getElementById('pdfCompany').value,email:document.getElementById('pdfEmail').value,phone:document.getElementById('pdfPhone').value,client:document.getElementById('pdfClient').value,logo};overlay.remove();generatePdf()};overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()})}
+async function generatePdf(){if(!window.jspdf?.jsPDF)return alert('PDF library failed to load.');if(!currentEstimate)recalc();const {jsPDF}=window.jspdf;const d=new jsPDF({unit:'pt',format:'letter'});const c=currentEstimate;const meta=currentPdfMeta||{};let y=36;d.setFillColor(217,72,28);d.rect(0,0,612,92,'F');d.setTextColor(255,255,255);d.setFontSize(20);d.text(meta.company||'Fire Sprinkler Estimate',36,32);d.setFontSize(11);d.text([meta.email,meta.phone].filter(Boolean).join('  •  '),36,52);d.text(meta.client?`Prepared for: ${meta.client}`:'Prepared for: General Contractor',36,70);if(meta.logo instanceof File){const data=await readFileAsDataURL(meta.logo);try{d.addImage(data,'PNG',470,18,96,50)}catch(e){}}d.setTextColor(20,20,20);d.setFontSize(14);d.text('Project Overview',36,124);y=144;const rows=[['Project',document.getElementById('projectName').value||'Untitled'],['Address',document.getElementById('projectAddress').value||''],['Project Type',c.type],['Building Type',document.getElementById('buildingType').value],['System',c.system],['Location Logic',c.location],['Total Sq Ft',num(c.totalSqFt)],['Sprinkler Heads',c.sh.toFixed(2)],['Material',money(c.material)],['Labor',money(c.labor)],['Design',money(c.design)],['Misc',money(c.misc)],['Subtotal #1',money(c.subtotal)],['Taxes',money(c.taxes)],['Profit',money(c.profit)],['Final Total',money(c.final)]];rows.forEach(([k,v],i)=>{const yy=y+i*22;d.setDrawColor(223,214,204);d.roundedRect(34,yy-14,544,18,6,6);d.setFontSize(10);d.text(k,44,yy);d.text(String(v),300,yy)});d.setFontSize(13);d.text('How This Estimate Was Calculated',36,520);d.setFontSize(10);const logic=[`SH = ${num(c.totalSqFt)} ÷ 95 = ${c.sh.toFixed(2)} heads`,`Material = ${c.sh.toFixed(2)} SH × ${c.system==='Dry'?'180':(c.location==='Dallas'?'105':'150')}`,`Labor = ${c.sh.toFixed(2)} SH × 32`,`Design = max(${c.sh.toFixed(2)} × 11, 1000)`,`Misc includes base and selected add-ons`,`Taxes = ${(document.getElementById('taxExempt').checked?'$0':`(Material + Misc) × 8.25%`)}, Profit = 20%`];d.splitTextToSize(logic.join('\n'),540).forEach((line,idx)=>d.text(line,36,540+idx*14));d.setFontSize(9);d.setTextColor(110,102,93);d.text(`${meta.company||'Fire Sprinkler Estimate'} • ${meta.email||''} • ${meta.phone||''}`,36,770);d.text('Professional fire protection estimate generated by Fire Sprinkler Project Estimator & Plan Analyzer',330,770,{align:'right'});d.save((document.getElementById('projectName').value||'sprinkler-estimate').replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'.pdf')}
+function readFileAsDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+function openAnalyzer(){document.body.insertAdjacentHTML('beforeend',document.getElementById('analyzerTemplate').innerHTML);const overlay=document.getElementById('analyzerOverlay');bindAnalyzer();overlay.querySelector('#closeAnalyzer').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});document.addEventListener('keydown',escCloseAnalyzer)}
+function escCloseAnalyzer(e){const overlay=document.getElementById('analyzerOverlay');if(e.key==='Escape'&&overlay){overlay.remove();document.removeEventListener('keydown',escCloseAnalyzer)}}
+function bindAnalyzer(){const panel=document.getElementById('analysisPanel');document.getElementById('runDemo').onclick=async()=>{panel.classList.remove('hidden');document.getElementById('analysisResult').classList.add('hidden');const steps=['Upload received','Rendering sheets','Correcting orientation','Reading title block','OCR text extraction','Detecting sheet types','Searching for square footage','Looking for sprinkler head counts','Identifying wet/dry indicators','Scanning for backflow references','Scanning for fire pump references','Detecting dry system notes','Estimating floor count','Parsing occupancy/building type','Cross-checking address/location','Building confidence map','Generating structured report','Finalizing estimate'];const stepsWrap=document.getElementById('analysisSteps');const log=document.getElementById('analysisLog');stepsWrap.innerHTML='';log.textContent='';for(let i=0;i<steps.length;i++){stepsWrap.innerHTML=steps.map((s,idx)=>`<div class="step" style="opacity:${idx<=i?1:.35}"><div class="dot"></div><div><div class="font-bold">${s}</div><div class="tiny">${idx<=i?'Complete':'Pending'}</div></div></div>`).join('');document.getElementById('analysisBar').style.width=`${((i+1)/steps.length)*100}%`;document.getElementById('analysisStatus').textContent=steps[i];log.textContent+=`${steps[i]}...\n`;await new Promise(r=>setTimeout(r,120))}document.getElementById('analysisResult').classList.remove('hidden');document.getElementById('findingList').innerHTML=`<div class="step"><div class="dot"></div><div><div class="font-bold">Building Type</div><div>Retail <span class="pill" style="background:#d1fae5;color:#065f46">High Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Fire Pump</div><div>Present <span class="pill" style="background:#fef3c7;color:#92400e">Medium Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Total Sq Ft</div><div>154,800 <span class="pill" style="background:#fee2e2;color:#991b1b">Low Confidence</span></div></div></div><div class="step"><div class="dot"></div><div><div class="font-bold">Heads</div><div>1,629 <span class="pill" style="background:#dbeafe;color:#1d4ed8">User Confirmed</span></div></div></div>`}}
+function bindApp(){document.getElementById('themeToggle').onclick=()=>{currentTheme=currentTheme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',currentTheme)};document.getElementById('openEstimate').onclick=openEstimate;document.getElementById('openEstimate2').onclick=openEstimate;document.getElementById('openAnalyzer').onclick=openAnalyzer;document.getElementById('openAnalyzer2').onclick=openAnalyzer;document.getElementById('openSaved').onclick=openSaved}
+renderApp();setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1200)
+</script>
 </body>
 </html>
